@@ -3,7 +3,7 @@ pipeline {
     agent any
 
     tools {
-        go 'go1.18.2'
+        go 'go1.17.5'
     }
     environment {
         GO114MODULE = 'on'
@@ -24,22 +24,22 @@ pipeline {
                 sh 'make functional-tests'
             }
         }
-//         stage("build") {
-//             steps {
-//                 echo 'BUILD EXECUTION STARTED'
-//                 sh 'go version'
-//                 sh 'go get ./...'
-//                 sh 'docker build . -t iqbal/golang-jenkins'
-//             }
-//         }
-//         stage('Docker Push') {
-//             agent any
-//             steps {
-//                 withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUser')]) {
-//                 sh "docker login -u ${env.dockerhubUser} -p ${env.dockerhubPassword}"
-//                 sh 'docker push iqbal482/golang-jenkins'
-//                 }
-//             }
+        stage("build") {
+            steps {
+                echo 'BUILD EXECUTION STARTED'
+                sh 'go version'
+                sh 'go get ./...'
+                sh 'docker build . -t iqbal/golang-jenkins'
+            }
+        }
+        stage('Docker Push') {
+            agent any
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUser')]) {
+                sh "docker login -u ${env.dockerhubUser} -p ${env.dockerhubPassword}"
+                sh 'docker push iqbal482/golang-jenkins'
+                }
+            }
         }
     }
 }
