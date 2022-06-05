@@ -3,7 +3,7 @@ pipeline {
     agent any
 
     tools {
-        go 'go1.14'
+        go 'go1.18.2'
     }
     environment {
         GO114MODULE = 'on'
@@ -29,7 +29,7 @@ pipeline {
                 echo 'BUILD EXECUTION STARTED'
                 sh 'go version'
                 sh 'go get ./...'
-                sh 'docker build . -t shadowshotx/product-go-micro'
+                sh 'docker build . -t iqbal/golang-jenkins'
             }
         }
         stage('Docker Push') {
@@ -37,7 +37,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUser')]) {
                 sh "docker login -u ${env.dockerhubUser} -p ${env.dockerhubPassword}"
-                sh 'docker push shadowshotx/product-go-micro'
+                sh 'docker push iqbal482/golang-jenkins'
                 }
             }
         }
